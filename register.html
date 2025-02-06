@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="register.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="form-section">
+            <h2>Get Started Now</h2>
+            <form name="signup" action="register.php" method="post" oninput="checkInputs()">
+                <label for="name">Name</label>
+                <input type="text" name="Username" id="name" placeholder="Enter your name" required>
+                
+                <label for="email">Email address</label>
+                <input type="email" name="EUmail" id="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password</label>
+                <input type="password" name="pass" id="password" placeholder="Enter your password" required>
+                
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                
+                <div class="checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to the terms & policy</label>
+                </div>
+                <button type="button" id="send-otp-btn" class="signup-btn" disabled onclick="sendOtp()">Send OTP</button>
+            </form>
+            <center>
+                <p class="signin-text">
+                    Have an account? <a href="login.html">Sign in</a>
+                </p>
+            </center>
+        </div>
+        <div class="image-section">
+            <div class="overlay"></div>
+            <img src="undraw_medicine_b-1-ol (1).svg" alt="Doctors illustration" height="300px">
+        </div>
+    </div>
+
+    <!-- OTP Modal -->
+    <div id="otp-modal" class="otp-modal">
+        <div class="otp-modal-content">
+            <h3>Enter OTP</h3>
+            <form id="verify-form" method="POST">
+                <input type="text" id="otp-input" name="otp" placeholder="Enter OTP" required>
+                <input type="hidden" id="otp-email" name="email" value="<?php echo $_SESSION['EUmail']; ?>">
+                <button type="button" onclick="verifyOtp()">Verify OTP</button>
+            </form>            
+            <button type="button" onclick="closeOtpModal()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+            function checkInputs() {
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+                const confirmPassword = document.getElementById("confirm-password").value.trim();
+                const termsChecked = document.getElementById("terms").checked;
+        
+                const btn = document.getElementById("send-otp-btn");
+                btn.disabled = !(name && email && password && confirmPassword && password === confirmPassword && termsChecked);
+            }
+        
+            function sendOtp() {
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const password = document.getElementById("password").value.trim();
+            
+                fetch('register.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ Username: name, EUmail: email, pass: password }),
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data.includes("OTP sent")) {
+                            document.getElementById("otp-email").value = email; // Update hidden email field
+                            alert("OTP has been sent to your email.");
+                            openOtpModal();
+                        } else {
+                            alert("Failed to send OTP: " + data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error sending OTP:", error);
+                        alert("An error occurred while sending OTP. Please try again.");
+                    });
+            }
+            
+            function openOtpModal() {
+                document.getElementById("otp-modal").style.display = "block";
+            }
+        
+            function closeOtpModal() {
+                document.getElementById("otp-modal").style.display = "none";
+            }
+            function verifyOtp() {
+                const otp = document.getElementById("otp-input").value.trim();
+                const email = document.getElementById("otp-email").value.trim();
+            
+                fetch('verify_otp.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ otp, email }),
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert(data.message);
+                            window.location.href = 'login.html';
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An unexpected error occurred. Please try again.');
+                    });
+                
+            }
+            
+            
+            
+            
+    </script>
+</body>
+</html>

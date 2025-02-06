@@ -1,0 +1,68 @@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+<script>
+    $(document).ready(function() {
+        $('#submitdetailsForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const userName = $('#userName').val().trim();
+            const userEmail = $('#userEmail').val().trim();
+            const userPhone = $('#userPhone').val().trim();
+            const userState = $('#userState').val();
+            const finalAmount = $('#finalAmount').text().replace('₹', '').trim();
+
+            if (isNaN(finalAmount)) {
+                $('#responseMessage').text('Invalid amount format').addClass('text-danger');
+                return;
+            }
+
+            const data = {
+                userName: userName,
+                userEmail: userEmail,
+                userPhone: userPhone,
+                userState: userState,
+                finalAmount: finalAmount
+            };
+
+            $.ajax({
+                url: 'api/payment_form.php',
+                method: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+                    if (response.status === 201) {
+                        alert('Form submitted successfully!'); 
+                        
+                        // Send email asynchronously
+                        $.ajax({
+                            url: 'email.php',
+                            method: 'POST',
+                            data: JSON.stringify(data),
+                            contentType: 'application/json',
+                            success: function(emailResponse) {
+                                console.log(emailResponse.message);
+                            },
+                            error: function() {
+                                console.log('Email failed to send');
+                            }
+                        });
+
+            
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000); // Adjust delay 1 sec
+                    } else {
+                        alert('Something went wrong!'); 
+                    }
+                },
+                error: function(xhr) {
+                    const errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'An unexpected error occurred';
+                    $('#responseMessage').text(errorMessage).addClass('text-danger');
+                }
+            });
+        });
+    });
+</script>
+
+
+

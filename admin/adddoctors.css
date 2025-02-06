@@ -1,0 +1,114 @@
+.background-wrapper{
+    background-image: url('img/background.jpg'); /* Replace with the image path */
+    background-size: cover; /* Ensures the image covers the entire area */
+    background-position: center;
+    background-attachment: fixed; /* Makes the background stay fixed on scroll */
+    font-family: 'Poppins', sans-serif;
+}
+.add-doctor-form-container {
+    margin: 60px auto;
+    padding: 40px;
+    background: linear-gradient(145deg, #e3e7ed, #f5f7fa);
+    border-radius: 15px;
+    max-width: 650px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    font-family: 'Poppins', sans-serif;
+}
+
+.add-doctor-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.add-doctor-form .form-group {
+    margin-bottom: 20px;
+}
+
+.add-doctor-form .form-group label {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.add-doctor-form .form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fff;
+    color: #333;
+}
+
+.add-doctor-form .form-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+.add-doctor-btn {
+    display: block;
+    width: 100%;
+    padding: 15px 0;
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.add-doctor-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+}
+
+.success-message {
+    color: #28a745;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.error-message {
+    color: #dc3545;
+    text-align: center;
+    margin-top: 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .add-doctor-form-container {
+        padding: 20px;
+    }
+
+    .add-doctor-title {
+        font-size: 24px;
+    }
+
+    .add-doctor-form .form-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .add-doctor-btn {
+        font-size: 16px;
+        padding: 12px 0;
+    }
+}
